@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -13,6 +13,7 @@ class Memes(Base):
     filename = Column(String(250), nullable=False)
     path = Column(String(250), nullable=False)
     full_filename = Column(String(250), nullable=False)
+    exists = Column(Boolean(), nullable=False)
 
  
 class Tags(Base):
