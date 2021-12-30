@@ -15,17 +15,26 @@ class Memes(Base):
     full_filename = Column(String(250), nullable=False)
     exists = Column(Boolean(), nullable=False)
 
+
  
 class Tags(Base):
     __tablename__ = 'tag_table'
     id = Column(Integer, primary_key=True)
     tag_name = Column(String(250), nullable=False, unique=True)
 
-class Mapping(Base):
-    __tablename__ = 'mapping'
+
+
+class Map_tags(Base):
+    __tablename__ = 'map_tags'
     id = Column(Integer, primary_key=True)
-    meme_id = Column(Integer, nullable=False)
-    tag_id = Column(Integer, nullable=False)
+    # meme_id = Column(Integer, nullable=False)
+    # tag_id = Column(Integer, nullable=False)
+
+    meme_id = Column(Integer, ForeignKey("memes_table.id"))
+    tag_id = Column(Integer, ForeignKey("tag_table.id"))
+
+    meme = relationship("Memes", foreign_keys=[meme_id])
+    tag = relationship("Tags", foreign_keys=[tag_id])
 
 
 
@@ -37,8 +46,18 @@ if "-c" in sys.argv or "--create" in sys.argv:
 
 # SELECT filename, 
 #     group_concat(tag_name,' ~ ') AS tags_for_this_object 
-# FROM mapping 
+# FROM map_tags 
 # JOIN memes_table ON meme_id = memes_table.id
 # JOIN tag_table ON tag_id = tag_table.id
+# GROUP BY filename
+# ;
+
+
+# SELECT filename, 
+#     group_concat(tag_name,' ~ ') AS tags_for_this_object 
+# FROM map_tags 
+# JOIN memes_table ON meme_id = memes_table.id
+# JOIN tag_table ON tag_id = tag_table.id
+# WHERE tag_table.tag_name LIKE "kabaczek"
 # GROUP BY filename
 # ;
