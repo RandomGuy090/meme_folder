@@ -33,8 +33,8 @@ class Map_tags(Base):
     meme_id = Column(Integer, ForeignKey("memes_table.id"))
     tag_id = Column(Integer, ForeignKey("tag_table.id"))
 
-    meme = relationship("Memes", foreign_keys=[meme_id])
-    tag = relationship("Tags", foreign_keys=[tag_id])
+    meme = relationship("Memes")
+    tag = relationship("Tags")
 
 
 
