@@ -2,9 +2,10 @@ from database import Database
 import os
 from var import *
 
+
 class Check_existance(Database):
 	def __init__(self, db_name):
-		super().__init__(db_name)
+		Database.__init__(self, db_name)
 		self.set_engine(db_name)
 		self.new_files = []
 		self.removed_files = []
