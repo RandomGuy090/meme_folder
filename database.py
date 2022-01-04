@@ -43,5 +43,18 @@ class Database(object):
 		d = session.query(Tags).filter(Tags.tag_name==tag_name).delete()
 		session.commit()
 
+	def get_shasum(self, file=None):
+		file = self.full_filename if file==None else file
+
+		with open(file, 'rb') as f:
+			while True:
+				data = f.read(self.BUF_SIZE)
+				if not data:
+					break
+				self.sha1.update(data)
+		
+		out = self.sha1.hexdigest()
+		return out
+
 
 

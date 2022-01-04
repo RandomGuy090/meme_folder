@@ -146,16 +146,6 @@ class Meme(Database, Serialise_data):
 		session.commit()
 		session.close()
 
-	def get_shasum(self):
-
-		with open(self.full_filename, 'rb') as f:
-			while True:
-				data = f.read(self.BUF_SIZE)
-				if not data:
-					break
-				self.sha1.update(data)
-		
-		out = self.sha1.hexdigest()
-		return out
+	
 
 		
