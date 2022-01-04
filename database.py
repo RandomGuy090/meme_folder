@@ -2,9 +2,15 @@ from var import *
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from db import Memes, Tags, Map_tags
+import hashlib, os
+
 
 class Database(object):
 	def __init__(self, db_name):
+		self.BUF_SIZE = 65536 
+
+		self.sha1 = hashlib.sha1()
+
 		self.set_engine(db_name)
 
 	def set_engine(self, db_name):
@@ -43,8 +49,22 @@ class Database(object):
 		d = session.query(Tags).filter(Tags.tag_name==tag_name).delete()
 		session.commit()
 
+
+	def get_by_hash(self, hashed):
+		session = self.check_session()
+		qr = session.query(Memes).order_by(Memes.full_filename).filter(Memes.shasum == hashed).all()
+		
+		names = list()
+		for elem in qr:
+			names.append(elem.full_filename)
+
+		return names
+
+
 	def get_shasum(self, file=None):
 		file = self.full_filename if file==None else file
+		if os.path.isdir(file):
+			return ""
 
 		with open(file, 'rb') as f:
 			while True:

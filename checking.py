@@ -24,9 +24,6 @@ class Check_existance(Database):
 				else:
 					self.removed_files.append(elem)
 
-
-
-
 	def get_diff(self, l1, l2):
 		x = list(set(l1) - set(l2)) + list(set(l2) - set(l1))
 		return  x
@@ -45,4 +42,12 @@ class Check_existance(Database):
 
 	def removed(self):
 		return self.removed_files
+
+	def check_replacement(self):
+		for elem in self.new_files:
+			hashed = self.get_shasum(elem)
+			l = self.get_by_hash(hashed)
+			for old in l:
+				return {"old":old, 
+						"new": elem}
 
