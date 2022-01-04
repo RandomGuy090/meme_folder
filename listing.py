@@ -14,22 +14,9 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 
-def create_tag(tag_name):
-	try:
-		qr = Tags(tag_name=tag_name)
-		session.add(qr)
-		session.commit()
-		session.close()
-	except Exception as e:
-		# print(e)
-		pass
-
-create_tag("directory")
-create_tag("link")
-create_tag("file")
-
-# PATHDIR = "/home/randomguy90/"
-
+Database(DB_NAME).create_tag("directory")
+Database(DB_NAME).create_tag("link")
+Database(DB_NAME).create_tag("file")
 
 
 class Tag(object):
@@ -39,14 +26,9 @@ class Tag(object):
 
 
 
-
-
-
-
-
-
 res = os.listdir(PATHDIR)
 ret = list()
+
 ex = Check_existance(db_name=DB_NAME)
 new_files = ex.new()
 for elem in new_files:
@@ -63,11 +45,3 @@ for elem in res:
 	x = Meme(elem, db_name=DB_NAME)
 	x.insert_to_db()
 	print(x.filename)
-
-	# a = Memes(filename=x.filename, path=x.path, full_filename=x.full_filename)
-	# session.add(a)
-	# session.commit()
-
-
-print(session.add)
-# print(ret)
