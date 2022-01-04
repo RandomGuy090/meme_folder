@@ -1,15 +1,27 @@
+from serialize import Serialise_data
+from db import Memes, Tags, Map_tags
 from database import  Database
 from var import *
-from serialize import Serialise_data
-import os
-from db import Memes, Tags, Map_tags
+import os, time
+import hashlib
 
 
 class Meme(Database, Serialise_data):
 	def __init__(self, name, db_name=None):
+		self.BUF_SIZE = 65536 
+
+		self.sha1 = hashlib.sha1()
+
+
 		self.filename = name
 		self.path = PATHDIR
-		self.full_filename = f"{PATHDIR}{self.filename}" if PATHDIR.endswith("/") else f"{PATHDIR}/{self.filename}"
+		self.full_filename = f"{PATHDIR}/{self.filename}"
+
+		self.full_filename = self.full_filename.replace("//", "/")
+
+		if self.full_filename.startswith(self.path*2):
+			self.full_filename = self.full_filename[len(self.path):]
+
 
 		self.is_dir = os.path.isdir(self.full_filename)
 		self.is_link = os.path.islink(self.full_filename)
@@ -25,37 +37,27 @@ class Meme(Database, Serialise_data):
 
 				
 		self.set_engine(self.db_name)
-		
-		
-		
 
-	def get_tags(self):
+
+	def get_meme_data(self):
 		# print(self.engine.table_names)
 		session = self.check_session()
-		
-		qr = session.query(Map_tags, Tags, Memes).join(Tags).join(Memes).all()
-		# qr = qr.group_by(Memes.id)
-
+		qr = session.query(Map_tags, Tags, Memes).filter(Memes.full_filename==self.full_filename).join(Tags).join(Memes)
+		# qr = session.query(Map_tags, Tags, Memes).join(Tags).join(Memes)
+		qr = qr.all()
 		ret = dict()
-		fields = self.get_fields(Map_tags)
+		
+		# fields = self.get_fields(Map_tags)
 
-		for map, tag, meme in qr: 
-
-			try:
-				ret[meme.id]["tags"].append(tag.tag_name)
-			except KeyError:
-				ret[meme.id] = {}
-				ret[meme.id]["tags"] = [tag.tag_name]
-			ret[meme.id]["filename"] = meme.filename
-			
-
+		ret = self.serialise_tags(qr=qr)
 		return ret
 
+	def meme_tags(self):
+		info = self.get_meme_data()
+		index = list(info)[0]
+		info = info[index].get("tags")
+		return info
 
-		# # qr = session.query(Tags).all()
-
-		# print(qr)
-		return qr
 	def printout(self):
 		print(self.full_filename)
 
@@ -68,11 +70,24 @@ class Meme(Database, Serialise_data):
 		else:
 			self.add_tag("file")
 
+	def get_meme_id(self):
+		session = self.check_session()
+		# session = self.check_session()
+		self.meme_object = session.query(Memes).filter(Memes.full_filename==self.full_filename).one()
+		session.flush()
+		session.close()
+
+
 
 	def insert_to_db(self, db=None):
+		shasum = self.get_shasum()
+		
+
 		session = self.check_session()
 
-		qr = Memes(filename=self.filename, path=self.path, full_filename=self.full_filename, exists=True)
+		qr = Memes(filename=self.filename, path=self.path, 
+			full_filename=self.full_filename, exists=True,
+			shasum = shasum)
 		self.meme_object = qr
 		session.add(qr)
 		session.flush()
@@ -86,6 +101,7 @@ class Meme(Database, Serialise_data):
 
 
 	def add_tag(self, tag_name):
+		self.create_tag(tag_name)
 		session = self.check_session()
 		try:
 			q = session.query(Tags)
@@ -97,21 +113,49 @@ class Meme(Database, Serialise_data):
 			raise Exception("no such tag ")
 
 		if self.meme_object == None:
-			# session = self.check_session()
-			self.meme_object = session.query(Memes).filter(id==self.meme_id).one()
-			session.flush()
-			session.close()
-
+			self.get_meme_id()
+			
 		# session = self.check_session()
 		# print(session)
 		session.add(tag)
 		session.add(self.meme_object)
 
 		qr = Map_tags(meme=self.meme_object, tag=tag)
-
-
+		
 		session.add(qr)
+		try:
+			session.commit()
+		except:
+			pass
+
+		session.close()
+
+		
+	def remove_tag(self, tag_name):
+		session = self.check_session()
+		qr = session.query(Map_tags, Tags, Memes).filter(Memes.full_filename==self.full_filename).join(Tags).join(Memes)
+		# qr = session.query(Map_tags, Tags, Memes).join(Tags).join(Memes)
+		qr = qr.all()
+		for map, tags, meme in qr:
+			if tags.tag_name == tag_name:
+				# tags.delete()
+				d = session.query(Map_tags).filter(Map_tags.tag_id==tags.id).delete()
+
+
+
 		session.commit()
 		session.close()
+
+	def get_shasum(self):
+
+		with open(self.full_filename, 'rb') as f:
+			while True:
+				data = f.read(self.BUF_SIZE)
+				if not data:
+					break
+				self.sha1.update(data)
+		
+		out = self.sha1.hexdigest()
+		return out
 
 		
