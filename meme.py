@@ -3,14 +3,11 @@ from db import Memes, Tags, Map_tags
 from database import  Database
 from var import *
 import os, time
-import hashlib
 
 
 class Meme(Database, Serialise_data):
 	def __init__(self, name, db_name=None):
-		self.BUF_SIZE = 65536 
-
-		self.sha1 = hashlib.sha1()
+		
 
 
 		self.filename = name
