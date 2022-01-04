@@ -18,8 +18,6 @@ class Database(object):
 		else:
 			raise Exception("engine not binded")
 
-
-
 	def list_all_memes(self):
 		session = self.check_session()
 		qr = session.query(Memes).order_by(Memes.full_filename)
@@ -28,5 +26,22 @@ class Database(object):
 			names.append(elem.full_filename)
 
 		return names
+
+	def create_tag(self, tag_name):
+		session = self.check_session()
+		try:
+			qr = Tags(tag_name=tag_name)
+			session.add(qr)
+			session.commit()
+			session.close()
+		except Exception as e:
+			# print(e)
+			pass
+
+	def remove_tag(self, tag_name):
+		session = self.check_session()
+		d = session.query(Tags).filter(Tags.tag_name==tag_name).delete()
+		session.commit()
+
 
 
