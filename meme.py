@@ -10,7 +10,8 @@ class Meme(Database, Serialise_data):
 		
 
 
-		self.filename = name
+		self.filename = os.path.basename(name)
+
 		self.path = PATHDIR
 		self.full_filename = f"{PATHDIR}/{self.filename}"
 
@@ -95,6 +96,21 @@ class Meme(Database, Serialise_data):
 		session.close()
 
 		self.type_flag()
+
+	def remove_meme(self):
+		print(f"remove: {self.full_filename}")
+		session = self.check_session()
+
+		qr = session.query(Memes).filter(Memes.full_filename == self.full_filename)
+		qr = qr.delete()
+		session.add(qr)
+		session.flush()
+		session.refresh(qr)
+		# print(self.meme_id)
+		session.commit()
+		session.close()
+
+
 
 
 	def add_tag(self, tag_name):
