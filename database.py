@@ -9,7 +9,6 @@ class Database(object):
 	def __init__(self, db_name):
 		self.BUF_SIZE = 65536 
 
-		self.sha1 = hashlib.sha1()
 
 		self.set_engine(db_name)
 
@@ -62,18 +61,24 @@ class Database(object):
 
 
 	def get_shasum(self, file=None):
+		sha1 = hashlib.sha1()
+
 		file = self.full_filename if file==None else file
-		if os.path.isdir(file):
+		
+		if not os.path.exists(file):
 			return ""
+
+		if os.path.isdir(file):
+			return file
 
 		with open(file, 'rb') as f:
 			while True:
 				data = f.read(self.BUF_SIZE)
 				if not data:
 					break
-				self.sha1.update(data)
+				sha1.update(data)
 		
-		out = self.sha1.hexdigest()
+		out = sha1.hexdigest()
 		return out
 
 
