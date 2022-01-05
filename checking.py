@@ -1,5 +1,7 @@
 from database import Database
 import os
+from meme import Memes
+from meme import Meme
 from var import *
 
 
@@ -13,6 +15,7 @@ class Check_existance(Database):
 		
 		self.list_all()
 		diff = self.get_diff(self.listed, self.listed_db)
+		diff = sorted(diff)
 		if len(diff) == 0 :
 
 			print("no difference")
@@ -20,9 +23,9 @@ class Check_existance(Database):
 			print("diff")
 			for elem in diff:
 				if os.path.exists(elem):
-					self.new_files.append(elem)
+					self.new_files.append(Meme(elem))
 				else:
-					self.removed_files.append(elem)
+					self.removed_files.append(Meme(elem))
 
 	def get_diff(self, l1, l2):
 		x = list(set(l1) - set(l2)) + list(set(l2) - set(l1))
@@ -43,11 +46,36 @@ class Check_existance(Database):
 	def removed(self):
 		return self.removed_files
 
+
 	def check_replacement(self):
-		for elem in self.new_files:
-			hashed = self.get_shasum(elem)
-			l = self.get_by_hash(hashed)
+		ret = list()
+		
+		for elem in self.new_files:	
+
+			hashed = self.get_shasum(elem.full_filename)
+			
+			a = self.get_by_hash(hashed)	
+			l = list()
+			for x in a:
+				l.append(Meme(x))
+
 			for old in l:
-				return {"old":old, 
-						"new": elem}
+				try:
+					self.new_files.remove(elem)
+				except:
+					pass
+
+				r = list()
+				for xD in self.removed_files:
+
+					if old.filename != xD.filename: 
+						r.append(xD)
+
+
+
+
+				self.removed_files = r
+
+				ret.append({"old":old, "new": elem})
+		return ret
 
