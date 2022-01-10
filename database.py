@@ -23,9 +23,11 @@ class Database(object):
 		else:
 			raise Exception("engine not binded")
 
-	def list_all_memes(self):
+	def list_all_memes(self, api=False):
 		session = self.check_session()
 		qr = session.query(Memes).order_by(Memes.full_filename)
+		if api:
+			return qr
 		names = list()
 		for elem in qr:
 			names.append(elem.full_filename)
@@ -49,10 +51,11 @@ class Database(object):
 		session.commit()
 
 
-	def get_by_hash(self, hashed):
+	def get_by_hash(self, hashed, api=False):
 		session = self.check_session()
 		qr = session.query(Memes).order_by(Memes.full_filename).filter(Memes.shasum == hashed).all()
-		
+		if api:
+			return qr
 		names = list()
 		for elem in qr:
 			names.append(elem.full_filename)
