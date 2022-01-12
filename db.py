@@ -42,6 +42,18 @@ class Map_tags(Base):
     meme = relationship("Memes")
     tag = relationship("Tags")
 
+class New_files_table(Base):
+    __tablename__ = "new_files_table"
+    id = Column(Integer, primary_key=True)
+
+
+    meme_new = Column(Integer, ForeignKey("memes_table.id",onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+    meme_old = Column(Integer, ForeignKey("memes_table.id",onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
+
+    # meme_new = relationship("Memes")
+    # meme_old = relationship("Memes")
+
+
 
 
 

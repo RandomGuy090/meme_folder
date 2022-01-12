@@ -1,5 +1,6 @@
 from database import Database
 import os
+from db import New_files_table
 from meme import Memes
 from meme import Meme
 from var import *
@@ -76,6 +77,7 @@ class Check_existance(Database):
 
 				self.removed_files = r
 
-				ret.append({"old":old, "new": elem})
+				ret.append(New_files_table(meme_new=elem, meme_old=old))
+		print(ret)
 		return ret
 
