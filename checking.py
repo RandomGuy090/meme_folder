@@ -72,12 +72,8 @@ class Check_existance(Database):
 					if old.filename != xD.filename: 
 						r.append(xD)
 
-
-
-
 				self.removed_files = r
-
 				ret.append(New_files_table(meme_new=elem, meme_old=old))
-		print(ret)
+
 		return ret
 
