@@ -24,8 +24,6 @@ class Tags(Base):
     tag_name = Column(String(250), nullable=False, unique=True)
 
 
-
-
 class Map_tags(Base):
     __tablename__ = 'map_tags'
     __table_args__ = (
@@ -33,8 +31,6 @@ class Map_tags(Base):
         )
     
     id = Column(Integer, primary_key=True)
-    # meme_id = Column(Integer, nullable=False)
-    # tag_id = Column(Integer, nullable=False)
 
     meme_id = Column(Integer, ForeignKey("memes_table.id",onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     tag_id = Column(Integer, ForeignKey("tag_table.id", onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
@@ -50,13 +46,7 @@ class New_files_table(Base):
     meme_new = Column(Integer, ForeignKey("memes_table.id",onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
     meme_old = Column(Integer, ForeignKey("memes_table.id",onupdate="CASCADE", ondelete="CASCADE"), nullable=False)
 
-    # meme_new = relationship("Memes")
-    # meme_old = relationship("Memes")
-
-
-
-
-
+   
 if "-c" in sys.argv or "--create" in sys.argv:
     engine = create_engine('sqlite:///sqlalchemy_example.db')
     Base.metadata.create_all(engine)
