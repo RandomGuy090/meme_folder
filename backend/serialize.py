@@ -54,9 +54,8 @@ removed_files = Removed_files(many=True)
 class New_files(ma.Schema):
 	class Meta:
 		model = Memes
-		fields = ('id', 'filename', 'path', 'full_filename', 'exists', "shasum", "tags")
+		fields = ('id', 'filename', 'path', 'full_filename', 'exists', "shasum")
 	
-	tags = ma.List(ma.String(), required=False)
 
 new_files = New_files(many=True)
 

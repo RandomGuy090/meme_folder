@@ -10,10 +10,15 @@ from serialize import *
 from var import *
 
 
-@app.route("/all_files", methods=["GET"])
-def all_files():
+@app.route("/meme", methods=["GET"])
+@app.route("/meme/<meme_id>", methods=["GET"])
+def all_files(meme_id=None):
 
-	memes = Database(DB_NAME).list_all_memes(api=True)
+	if meme_id:
+		memes = Database(DB_NAME).list_all_memes(api=True, meme_id=meme_id)
+	else:
+		memes = Database(DB_NAME).list_all_memes(api=True)
+
 
 	memes = memes.all()
 	res = all_memes.dump(memes)

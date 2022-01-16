@@ -23,7 +23,7 @@ class Database(object):
 		else:
 			raise Exception("engine not binded")
 
-	def list_all_memes(self, api=False):
+	def list_all_memes(self, api=False, meme_id=None):
 		session = self.check_session()
 		
 		# qr = session.query(Memes).order_by(Memes.full_filename)
@@ -36,11 +36,8 @@ class Database(object):
 			Memes.shasum,
 			func.group_concat(Tags.tag_name.op(' ')(literal_column(",'~'")))).join(Memes ,Memes.id==Map_tags.meme_id).join(Tags ,Tags.id==Map_tags.tag_id).group_by(Memes.id)
 
-		print(session.execute(qr).keys())
-		   # DBSession.query(Posts,func.group_concat(Post_Tags.tag_name.op('SEPARATOR')(literal_column('/')))).outerjoin(PostsTagsMap,Posts.post_id==PostsTagsMap.post_id).outerjoin(Post_Tags,PostsTagsMap.tags_id==Post_Tags.tag_id).group_by(Posts.post_id)
-
-		# qr = session.query(Map_tags, Tags, Memes).join(Tags).join(Memes)
-		# print(qr.all())
+		if meme_id:
+			qr = qr.filter(Map_tags.meme_id==int(meme_id))
 
 		if api:
 			return qr
@@ -49,6 +46,7 @@ class Database(object):
 			names.append(elem.full_filename)
 
 		return names
+
 
 
 	def create_tag(self, tag_name):
