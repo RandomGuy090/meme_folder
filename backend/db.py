@@ -50,34 +50,3 @@ class New_files_table(Base):
 if "-c" in sys.argv or "--create" in sys.argv:
     engine = create_engine('sqlite:///sqlalchemy_example.db')
     Base.metadata.create_all(engine)
-
-
-
-# SELECT filename, 
-#     group_concat(tag_name,' ~ ') AS tags_for_this_object 
-# FROM map_tags 
-# JOIN memes_table ON meme_id = memes_table.id
-# JOIN tag_table ON tag_id = tag_table.id
-# GROUP BY filename
-# ;
-
-
-# SELECT filename, 
-#     group_concat(tag_name,' ~ ') AS tags_for_this_object 
-# FROM map_tags 
-# JOIN memes_table ON meme_id = memes_table.id
-# JOIN tag_table ON tag_id = tag_table.id
-# WHERE tag_table.tag_name LIKE "kabaczek"
-# GROUP BY filename
-# ;
-
-
-# SELECT meme_id, filename, 
-#     group_concat(tag_name,' ~ ') AS tags_for_this_object 
-# FROM map_tags 
-# JOIN memes_table ON meme_id = memes_table.id
-# JOIN tag_table ON tag_id = tag_table.id
-# WHERE   map_tags.meme_id LIKE 784
-# GROUP BY meme_id
-# ;
-
