@@ -72,7 +72,6 @@ class Moved_files(ma.Schema):
 moved_files = Moved_files(many=True)
 
 
-
 class All_memes():
 
 	class Meta:
@@ -80,12 +79,9 @@ class All_memes():
 		strict = True
 		fields = ('id', 'filename', 'path', 'full_filename', 'exists', "shasum", "tags")
 
-	# group_concat_1 = ma.List(ma.String(), required=True)
-		
 	def __init__(self,many=False):
 		self.obj = None
 		self.ret = list()
-		print(self.Meta.fields)
 
 	def dump(self, obj):
 		self.obj = obj
@@ -101,8 +97,6 @@ class All_memes():
 			self.ret.append(x)
 		return self.parse_json()
 		
-		# print("____?")
-		# print(self.ret)
 	def parse_json(self):
 		return self.ret
 		# return json.dumps(self.ret)
