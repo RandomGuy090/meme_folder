@@ -76,6 +76,15 @@ class Database(object):
 			names.append(elem.full_filename)
 
 		return names
+	
+	def list_all_tags(self, api=False):
+		session = self.check_session()
+		qr = session.query(Tags).order_by(Tags.id).all()
+
+		if api:
+			return qr
+		return None
+
 
 
 	def get_shasum(self, file=None):

@@ -44,6 +44,12 @@ def moved():
 	res = moved_files.dump(moved)
 	return jsonify(res)
 
+def all_tags():
+
+	tags = Database(DB_NAME).list_all_tags(api=True)
+	res = all_tags_ser.dump(tags)
+	return jsonify(res)
+
 
 
 

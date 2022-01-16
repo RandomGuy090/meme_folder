@@ -109,3 +109,12 @@ class All_memes():
 
 
 all_memes = All_memes(many=True)
+
+
+
+class All_tags(ma.Schema):
+	class Meta:
+  		model = Tags
+  		fields = ('id', 'tag_name')
+
+all_tags_ser = All_tags(many=True)
