@@ -1,6 +1,6 @@
 from var import *
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func, literal_column
 from db import Memes, Tags, Map_tags
 import hashlib, os
 
@@ -25,7 +25,23 @@ class Database(object):
 
 	def list_all_memes(self, api=False):
 		session = self.check_session()
-		qr = session.query(Memes).order_by(Memes.full_filename)
+		
+		# qr = session.query(Memes).order_by(Memes.full_filename)
+		('id', 'filename', 'path', 'full_filename', 'exists', "shasum")
+		qr = session.query(Map_tags.meme_id, 
+			Memes.filename,
+			Memes.path,
+			Memes.full_filename,
+			Memes.exists,
+			Memes.shasum,
+			func.group_concat(Tags.tag_name.op(' ')(literal_column(",'~'")))).join(Memes ,Memes.id==Map_tags.meme_id).join(Tags ,Tags.id==Map_tags.tag_id).group_by(Memes.id)
+
+		print(session.execute(qr).keys())
+		   # DBSession.query(Posts,func.group_concat(Post_Tags.tag_name.op('SEPARATOR')(literal_column('/')))).outerjoin(PostsTagsMap,Posts.post_id==PostsTagsMap.post_id).outerjoin(Post_Tags,PostsTagsMap.tags_id==Post_Tags.tag_id).group_by(Posts.post_id)
+
+		# qr = session.query(Map_tags, Tags, Memes).join(Tags).join(Memes)
+		# print(qr.all())
+
 		if api:
 			return qr
 		names = list()
@@ -33,6 +49,7 @@ class Database(object):
 			names.append(elem.full_filename)
 
 		return names
+
 
 	def create_tag(self, tag_name):
 		session = self.check_session()
