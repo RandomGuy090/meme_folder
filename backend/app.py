@@ -50,8 +50,14 @@ def all_tags():
 	res = all_tags_ser.dump(tags)
 	return jsonify(res)
 
+def get_by_tags(tag_id):
+	print(tag_id)
+	
+	tags = Database(DB_NAME).list_by_tags(api=True, tag_id=tag_id)
 
-
+	print(tags)
+	res = new_files.dump(tags)
+	return jsonify(res)
 
 if __name__ == '__main__':
   app.run(debug=True)

@@ -85,6 +85,38 @@ class Database(object):
 			return qr
 		return None
 
+	def list_by_tags(self, api=False, tag_id=None):
+		session = self.check_session()
+		if tag_id == None:
+			return False
+
+		if isinstance(tag_id, int):
+			qr = session.query(Map_tags.meme_id, 
+				Memes.filename,
+				Memes.path,
+				Memes.full_filename,
+				Memes.exists,
+				Memes.shasum,
+				).join(Memes ,Memes.id==Map_tags.meme_id)\
+			.join(Tags ,Tags.id==Map_tags.tag_id)\
+			.filter(Tags.id == tag_id)\
+			.group_by(Memes.id)
+		elif isinstance(tag_id, str):
+			qr = session.query(Map_tags.meme_id, 
+				Memes.filename,
+				Memes.path,
+				Memes.full_filename,
+				Memes.exists,
+				Memes.shasum,
+				).join(Memes ,Memes.id==Map_tags.meme_id)\
+			.join(Tags ,Tags.id==Map_tags.tag_id)\
+			.filter(Tags.tag_name == tag_id)\
+			.group_by(Memes.id)
+			
+		return qr.all()
+
+
+
 
 
 	def get_shasum(self, file=None):
