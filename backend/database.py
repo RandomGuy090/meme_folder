@@ -57,6 +57,11 @@ class Tags_queries(object):
 		if tag_id == None:
 			return False
 
+		try:
+			tag_id = int(tag_id)
+		except ValueError:
+			tag_id = str(tag_id)
+
 		if isinstance(tag_id, int):
 			qr = session.query(Map_tags.meme_id, 
 				Memes.filename,
@@ -68,6 +73,7 @@ class Tags_queries(object):
 			.join(Tags ,Tags.id==Map_tags.tag_id)\
 			.filter(Tags.id == tag_id)\
 			.group_by(Memes.id)
+
 		elif isinstance(tag_id, str):
 			qr = session.query(Map_tags.meme_id, 
 				Memes.filename,
