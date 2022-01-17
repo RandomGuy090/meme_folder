@@ -5,24 +5,8 @@ from db import Memes, Tags, Map_tags
 import hashlib, os
 
 
-class Database(object):
-	def __init__(self, db_name):
-		self.BUF_SIZE = 65536 
 
-
-		self.set_engine(db_name)
-
-	def set_engine(self, db_name):
-		self.engine = create_engine(f'sqlite:///{db_name}.db')
-
-	def check_session(self):
-		if self.engine:
-			Session = sessionmaker(bind=self.engine)
-			session = Session()
-			return session
-		else:
-			raise Exception("engine not binded")
-
+class Meme_queries(object):
 	def list_all_memes(self, api=False, meme_id=None):
 		session = self.check_session()
 		
@@ -45,26 +29,7 @@ class Database(object):
 		for elem in qr:
 			names.append(elem.full_filename)
 
-		return names
-
-
-
-	def create_tag(self, tag_name):
-		session = self.check_session()
-		try:
-			qr = Tags(tag_name=tag_name)
-			session.add(qr)
-			session.commit()
-			session.close()
-		except Exception as e:
-			# print(e)
-			pass
-
-	def remove_tag(self, tag_name):
-		session = self.check_session()
-		d = session.query(Tags).filter(Tags.tag_name==tag_name).delete()
-		session.commit()
-
+		return names	
 
 	def get_by_hash(self, hashed, api=False):
 		session = self.check_session()
@@ -76,7 +41,9 @@ class Database(object):
 			names.append(elem.full_filename)
 
 		return names
-	
+
+
+class Tags_queries(object):
 	def list_all_tags(self, api=False):
 		session = self.check_session()
 		qr = session.query(Tags).order_by(Tags.id).all()
@@ -112,12 +79,43 @@ class Database(object):
 			.join(Tags ,Tags.id==Map_tags.tag_id)\
 			.filter(Tags.tag_name == tag_id)\
 			.group_by(Memes.id)
-			
+
 		return qr.all()
 
+	def create_tag(self, tag_name):
+		session = self.check_session()
+		try:
+			qr = Tags(tag_name=tag_name)
+			session.add(qr)
+			session.commit()
+			session.close()
+		except Exception as e:
+			# print(e)
+			pass
+
+	def remove_tag(self, tag_name):
+		session = self.check_session()
+		d = session.query(Tags).filter(Tags.tag_name==tag_name).delete()
+		session.commit()
 
 
+class Database(Tags_queries, Meme_queries):
+	def __init__(self, db_name):
+		self.BUF_SIZE = 65536 
 
+
+		self.set_engine(db_name)
+
+	def set_engine(self, db_name):
+		self.engine = create_engine(f'sqlite:///{db_name}.db')
+
+	def check_session(self):
+		if self.engine:
+			Session = sessionmaker(bind=self.engine)
+			session = Session()
+			return session
+		else:
+			raise Exception("engine not binded")
 
 	def get_shasum(self, file=None):
 		sha1 = hashlib.sha1()
@@ -139,6 +137,3 @@ class Database(object):
 		
 		out = sha1.hexdigest()
 		return out
-
-
-
