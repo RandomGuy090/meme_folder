@@ -98,7 +98,9 @@ class All_memes():
 		return self.parse_json()
 		
 	def parse_json(self):
-		return self.ret
+		x = self.ret
+		self.ret = []
+		return x
 		# return json.dumps(self.ret)
 
 	def get_values(self, element=None, index=None, separator=""):

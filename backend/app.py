@@ -1,7 +1,7 @@
 
 from db import Memes, Map_tags, Tags, New_files_table
 from checking import Check_existance
-from meme import Memes
+from meme import Meme
 from database import Database
 
 import os, json
@@ -18,12 +18,10 @@ def all_files(meme_id=None):
 
 	memes = memes.all()
 	res = all_memes.dump(memes)
-
 	return jsonify(res)
 
 
 def removed():
-
 	ex = Check_existance(db_name=DB_NAME)
 	removed = ex.removed()
 	res = removed_files.dump(removed)
@@ -31,31 +29,42 @@ def removed():
 
 
 def new():
-	
 	ex = Check_existance(db_name=DB_NAME)
 	removed = ex.new()
 	res = new_files.dump(removed)
 	return jsonify(res)
 
 def moved():
-	
 	ex = Check_existance(db_name=DB_NAME)
 	moved = ex.check_replacement()
 	res = moved_files.dump(moved)
 	return jsonify(res)
 
 def all_tags():
-
 	tags = Database(DB_NAME).list_all_tags(api=True)
 	res = all_tags_ser.dump(tags)
 	return jsonify(res)
 
 def get_by_tags(tag_id):
-	
 	tags = Database(DB_NAME).list_by_tags(api=True, tag_id=tag_id)
-
 	res = new_files.dump(tags)
 	return jsonify(res)
+
+def add_tag_to_file(meme_id, tag_id):
+	memes = Database(DB_NAME).list_all_memes(api=True, meme_id=int(meme_id))
+	res = all_memes.dump(memes)[0]
+
+	print(res.get("full_filename"))
+	meme_obj = Meme(res.get("full_filename"), db_name=DB_NAME)
+	meme_obj.add_tag(tag_id=int(tag_id))
+
+	memes = Database(DB_NAME).list_all_memes(api=True, meme_id=int(meme_id))
+
+	res = all_memes.dump(memes)[0]
+
+	return jsonify(res)
+	# return jsonify({"status": 501})
+
 
 if __name__ == '__main__':
   app.run(debug=True)

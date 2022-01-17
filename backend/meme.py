@@ -113,17 +113,32 @@ class Meme(Database, Serialise_data):
 
 
 
-	def add_tag(self, tag_name):
+	def add_tag(self, tag_name=None, tag_id=None):
 		self.create_tag(tag_name)
 		session = self.check_session()
-		try:
-			q = session.query(Tags)
-			q = q.filter(Tags.tag_name==tag_name)
-			tag = q.one()
-			session.expunge(tag)
-			session.close()
-		except:
-			raise Exception("no such tag ")
+		if tag_name != None:
+			print(f"tag_name = {tag_name}")
+			try:
+				q = session.query(Tags)
+				q = q.filter(Tags.tag_name==tag_name)
+				tag = q.one()
+				session.expunge(tag)
+				session.close()
+			except:
+				raise Exception("no such tag ")
+		elif tag_id != None:
+			print(f"tag_id = {tag_id}")
+
+			try:
+				q = session.query(Tags)
+				q = q.filter(Tags.id==tag_id)
+				tag = q.one()
+				session.expunge(tag)
+				session.close()
+			except:
+				raise Exception("no such tag ")
+		else:
+			raise Exception("tag_id or tag_no not specified")
 
 		if self.meme_object == None:
 			self.get_meme_id()
