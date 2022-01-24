@@ -159,17 +159,21 @@ class Meme(Database, Serialise_data):
 		session.close()
 
 		
-	def remove_tag(self, tag_name):
+	def remove_tag(self, tag_name=None, tag_id=None):
 		session = self.check_session()
 		qr = session.query(Map_tags, Tags, Memes).filter(Memes.full_filename==self.full_filename).join(Tags).join(Memes)
 		# qr = session.query(Map_tags, Tags, Memes).join(Tags).join(Memes)
 		qr = qr.all()
-		for map, tags, meme in qr:
-			if tags.tag_name == tag_name:
-				# tags.delete()
-				d = session.query(Map_tags).filter(Map_tags.tag_id==tags.id).delete()
-
-
+		if tag_name:
+			for map, tags, meme in qr:
+				if tags.tag_name == tag_name:
+					# tags.delete()
+					d = session.query(Map_tags).filter(Map_tags.tag_id==tags.id).delete()
+		if tag_id:
+			for map, tags, meme in qr:
+				if tags.id == tag_id:
+					# tags.delete()
+					d = session.query(Map_tags).filter(Map_tags.tag_id==tags.id).delete()
 
 		session.commit()
 		session.close()

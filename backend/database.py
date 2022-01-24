@@ -7,6 +7,22 @@ import hashlib, os
 
 
 class Meme_queries(object):
+	def get_by_name_like(self, name, api=False):
+		session = self.check_session()
+
+		search = "%{}%".format(name)
+		qr = session.query(Memes).filter(Memes.filename.like(search))
+
+		if api:
+			return qr
+
+		names = list()
+		for elem in qr:
+			names.append(elem.full_filename)
+
+		return names	
+
+
 	def list_all_memes(self, api=False, meme_id=None):
 		session = self.check_session()
 		
@@ -88,21 +104,23 @@ class Tags_queries(object):
 
 		return qr.all()
 
-	def create_tag(self, tag_name):
+	def create_tag(self, tag_name, api=False):
 		session = self.check_session()
 		try:
 			qr = Tags(tag_name=tag_name)
 			session.add(qr)
 			session.commit()
 			session.close()
+			return True
 		except Exception as e:
-			# print(e)
+			return False
 			pass
 
-	def remove_tag(self, tag_name):
+	def remove_tag(self, tag_name, api=False):
 		session = self.check_session()
 		d = session.query(Tags).filter(Tags.tag_name==tag_name).delete()
 		session.commit()
+		return True
 
 
 class Database(Tags_queries, Meme_queries):
