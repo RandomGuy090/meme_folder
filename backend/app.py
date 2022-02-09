@@ -9,14 +9,13 @@ from serialize import *
 from routing import app
 
 def search():
-	print(request.args)
 	search = request.args.get("search")
 
 	memes = Database(DB_NAME).get_by_name_like(api=True, name=search)
 	memes = memes.all()
 	res = new_files.dump(memes)
 	return jsonify(res)
-
+@cross_origin()
 def all_files(meme_id=None):
 
 	if meme_id:
