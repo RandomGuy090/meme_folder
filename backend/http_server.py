@@ -14,5 +14,5 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
 
 def run_http_server():
     handler = MyHttpRequestHandler
-    with socketserver.TCPServer(("", PORT), handler) as httpd:
+    with socketserver.TCPServer(("", PORT_IMGS), handler) as httpd:
         httpd.serve_forever()
