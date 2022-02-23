@@ -10,19 +10,19 @@ const Mainpage = () => {
 
   const [focusedFile, setFocusedFile] = useState(false);
   const [filename, setFilename] = useState(null);
+  const [fileId, setFileId] = useState(1);
 
 
-    const handleFocusedState = (val, filename) => {
+    const handleFocusedState = (val, filename, idoffile) => {
       setFocusedFile(val)
-      console.log(val)
-      console.log(filename)
       setFilename(val)
+      setFileId(idoffile)
+      console.log(val)
     }
 
     var focus = <></>
-    console.log(focusedFile);
     if (focusedFile){
-      focus = <ViewImage onChange={handleFocusedState} filename={focusedFile}/>
+      focus = <ViewImage onChange={handleFocusedState} file={focusedFile} keyid={fileId}/>
     }
 
 
@@ -31,7 +31,7 @@ const Mainpage = () => {
         <Header />
 
         <LeftPanel />
-        <ContentPanel props={focusedFile} onChange={setFocusedFile}/>
+        <ContentPanel focusedFile={focusedFile} onChange={handleFocusedState}/>
         {focus}
         <RightPanel />
 

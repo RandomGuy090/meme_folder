@@ -173,6 +173,13 @@ a {
 	width: 90%;
 	object-fit: cover;
 }
+.meme-view{
+	position: relative;
+	height: 90%;
+	max-width: 70vw;
+	/*width: 90%;*/
+	object-fit: contain;
+}
 .img-list{
 	display: flex;
 	flex-direction: row;
@@ -278,7 +285,9 @@ a {
 }
 
 .imgBackground{
+	
 	width: 75vw;
+
 	display: flex;
 	justify-content: center;
 	align-items: center;

@@ -2,23 +2,28 @@
 import Tag from "./tags/tag.jsx";
 import ViewImageComment from "./viewImageComment.jsx";
 
-const ViewImage = ({onChange, filename}) => {
+const ViewImage = ({onChange, file, fileId}) => {
+ 
+  const changeState = (e) => {
 
-  const changeState = () => {
-    onChange(false)
+    if(e.target === e.currentTarget) {
+      onChange(false, null, fileId)
 
-  }
+    }
+  } 
+
+
   return (
     <>
       
       <div className="view">
       <div>
-          <div className="imgBackground">
+          <div className="imgBackground" onClick={changeState}>
             {
-              filename.endsWith("webm") || filename.endsWith("mp4") ?
-              <video src={`${filename}`} className="meme"></video>
+              file.filename.endsWith("webm") || file.filename.endsWith("mp4") ?
+              <video src={`http://127.0.0.1:8000/${file.filename}`} className="meme-view"></video>
               :
-              <img src={`${filename}`} className="meme" />
+              <img src={`http://127.0.0.1:8000/${file.filename}`} className="meme-view" />
             }
           </div> 
         <div className="img-button next" value=">">  </div>
@@ -28,7 +33,11 @@ const ViewImage = ({onChange, filename}) => {
         <div className="sidebar">
          
             <div className="tags">
-              <Tag />
+            {
+              file.tags.map((elem, index) => {
+                return <Tag key={index} name={elem}/>
+              })
+            }
             </div>
       
         </div>

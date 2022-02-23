@@ -32,8 +32,8 @@ const MovedFiles = () => {
           <div className="moved">
             <header>Moved</header>
             {
-              data.map((elem) => {
-                return <p key={elem.id}>{elem.meme_old.filename} -> {elem.meme_new.filename}</p>
+              data.map((elem, index) => {
+                return <p key={index} >{elem.meme_old.filename} -> {elem.meme_new.filename} </p>
               })
             }
             

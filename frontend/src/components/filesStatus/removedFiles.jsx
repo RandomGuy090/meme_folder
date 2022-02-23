@@ -36,8 +36,8 @@ const RemovedFiles = () => {
           <div className="removed">
             <header>New files</header>
             {
-              data.map((elem) => {
-                return <p key={elem.id}>{elem.filename} </p>
+              data.map((elem, index) => {
+                return <p key={index}>{elem.filename} </p>
               })
             }
             

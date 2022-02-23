@@ -1,25 +1,53 @@
 import React, { useState, useEffect } from "react";
 
-const ImagePreviewObject = ({filename, onChange, id}) => {
+const ImagePreviewObject = ({file, onChange, imgid}) => {
       
+  // const [imgDim, changeDim] = useState(null);
 
   const changeState = (e) => {
-    onChange(e.target.src, true)   
+    /*console.log(imgid)*/
 
+    onChange(file, true, imgid)   
+  }
+
+  
+  useEffect( () => {
+    /*var img = document.createElement('img');
+    img.src = file.filename;
+    console.log(img);
+    */
+
+
+  }, [])
+
+  const changeDim = () => {
+    let img = document.getElementById(`image-${imgid}`)
+
+  }
+
+  const filetype = () => {
+    
+    if (file.filename.endsWith("webm") || file.filename.endsWith("mp4")){
+      return <video  src={`http://127.0.0.1:8000/${file.filename}`} className="meme"></video>
+
+    }else if (file.filename.endsWith("jpg") || 
+              file.filename.endsWith("jpeg")|| 
+              file.filename.endsWith("png")|| 
+              file.filename.endsWith("gif")){
+      return <img src={`http://127.0.0.1:8000/${file.filename}`} className="meme" onLoad={changeDim}/>
+    }else{
+      return <img src={"https://icons.iconarchive.com/icons/paomedia/small-n-flat/512/folder-icon.png"} className="meme"/>
+
+    }
   }
 
   return (
     <>
     
-      <div  className="meme-link" onClick={changeState}>
+      <div  className="meme-link" onClick={changeState} id={`image-${imgid}`}>
             {/*<video src="http://127.0.0.1:8000/(s)hell.webm" className="meme"></video>*/}
 
-            {
-              filename.endsWith("webm") || filename.endsWith("mp4") ?
-              <video key={id} src={`${filename}`} className="meme"></video>
-              :
-              <img key={id} src={`${filename}`} className="meme" />
-            }
+            {filetype()}
 
             
 

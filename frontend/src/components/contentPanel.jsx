@@ -2,7 +2,7 @@ import ImagePreviewObject from "./imagePrevievObject.jsx";
 import React, { useState,  useEffect } from 'react';
 
 
-const ContentPanel = ({onChange}) => {
+const ContentPanel = ({onChange, focusedFile}) => {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -50,8 +50,7 @@ const ContentPanel = ({onChange}) => {
             <div className="img-list">
               { 
                 data.map((elem) => {
-                  var filename = `http://127.0.0.1:8000/${elem.filename}`
-                    return <ImagePreviewObject  onChange={onChange} filename={filename} id={elem.id}/>
+                    return <div key={elem.id}><ImagePreviewObject  onChange={onChange} file={elem} imgid={elem.id}/></div>
                 })
               }
 

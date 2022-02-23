@@ -1,7 +1,4 @@
 import { Outlet, Link } from "react-router-dom";
-
-
-
 import React, { useState, useEffect } from "react";
 
 const NewFiles = () => {
@@ -37,8 +34,8 @@ const NewFiles = () => {
           <div className="new">
             <header>New files</header>
             {
-              data.map((elem) => {
-                return <p key={elem.id}>{elem.filename} </p>
+              data.map((elem, index) => {
+                return <p key={index}>{elem.filename} </p>
               })
             }
             
