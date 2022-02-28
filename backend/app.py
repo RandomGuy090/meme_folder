@@ -15,15 +15,23 @@ def search():
 	memes = memes.all()
 	res = new_files.dump(memes)
 	return jsonify(res)
+
 @cross_origin()
 def all_files(meme_id=None):
-
+	
 	if meme_id:
 		memes = Database(DB_NAME).list_all_memes(api=True, meme_id=meme_id)
+		memes = memes.all()
 	else:
 		memes = Database(DB_NAME).list_all_memes(api=True)
+		page = request.json.get("range")
+		memes = memes.all()
+		
+		if page:
+			page = int(page)
+			memes = memes[page*SINGLE_FILE_FETCH_COUNT:(page+1)*SINGLE_FILE_FETCH_COUNT]
+			
 
-	memes = memes.all()
 	res = all_memes.dump(memes)
 	return jsonify(res)
 
