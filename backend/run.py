@@ -8,7 +8,7 @@ if __name__ == '__main__':
 
   # flask_thread = Thread(target = app.run, kwargs={"debug":True, "host":"127.0.0.1", "port":12345}).start()
   http_thread = Thread(target = run_http_server).start()
-  app.run( host="127.0.0.1", port=PORT_FLASK)
+  app.run(host=IP_FLASK, port=PORT_FLASK)
 
   # run_http_server()
   
