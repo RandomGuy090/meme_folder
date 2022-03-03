@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
 const ImagePreviewObject = ({file, onChange, imgid}) => {
       
   // const [imgDim, changeDim] = useState(null);
@@ -34,9 +36,9 @@ const ImagePreviewObject = ({file, onChange, imgid}) => {
               file.filename.endsWith("jpeg")|| 
               file.filename.endsWith("png")|| 
               file.filename.endsWith("gif")){
-      return <img src={`http://127.0.0.1:8000/${file.filename}`} className="meme" onLoad={changeDim}/>
+      return <LazyLoadImage src={`http://127.0.0.1:8000/${file.filename}`} className="meme" onLoad={changeDim}/>
     }else{
-      return <img src={"https://icons.iconarchive.com/icons/paomedia/small-n-flat/512/folder-icon.png"} className="meme"/>
+      return <LazyLoadImage src={"https://icons.iconarchive.com/icons/paomedia/small-n-flat/512/folder-icon.png"} className="meme"/>
 
     }
   }
