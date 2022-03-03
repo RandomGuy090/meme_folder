@@ -24,7 +24,7 @@ def all_files(meme_id=None):
 		memes = memes.all()
 	else:
 		memes = Database(DB_NAME).list_all_memes(api=True)
-		page = request.json.get("range")
+		page = request.args.get("page")
 		memes = memes.all()
 		
 		if page:
