@@ -1,8 +1,13 @@
+import React, { useState, useEffect} from 'react';
+
 
 import Tag from "./tags/tag.jsx";
 import ViewImageComment from "./viewImageComment.jsx";
 
 const ViewImage = ({onChange, file, fileId}) => {
+  useEffect(() => {
+      console.log(file)
+  })
  
   const changeState = (e) => {
 
@@ -34,8 +39,8 @@ const ViewImage = ({onChange, file, fileId}) => {
          
             <div className="tags">
             {
-              file.tags.map((elem, index) => {
-                return <Tag key={index} name={elem}/>
+              // file.tags.map((elem, index) => {
+                // return <Tag key={index} name={elem}/>
               })
             }
             </div>
