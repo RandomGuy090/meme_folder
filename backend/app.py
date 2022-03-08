@@ -88,7 +88,7 @@ def all_tags():
 
 def get_by_tags(tag_id):
 	tags = Database(DB_NAME).list_by_tags(api=True, tag_id=tag_id)
-	res = new_files.dump(tags)
+	res = all_memes.dump(tags)
 	return jsonify(res)
 
 
