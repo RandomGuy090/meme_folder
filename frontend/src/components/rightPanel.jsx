@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import Tag from "./tags/tag.jsx";
 
-const RightPanel = () => {
+const RightPanel = ({setFiles}) => {
 
   const [tags, setTags] = useState([])
   const [loading, setLoading] = useState(true)
@@ -36,7 +36,7 @@ if(!loading){
            <div>
             {
               tags.map((elem, index) => {
-                return <Tag key={elem.id} name={elem.tag_name}/>
+                return <Tag key={elem.id} setFiles={setFiles}  id={elem.id} name={elem.tag_name}/>
               })
             }
            </div>  
