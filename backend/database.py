@@ -79,26 +79,47 @@ class Tags_queries(object):
 			tag_id = str(tag_id)
 
 		if isinstance(tag_id, int):
+			# qr = session.query(Map_tags.meme_id, 
+			# 	Memes.filename,
+			# 	Memes.path,
+			# 	Memes.full_filename,
+			# 	Memes.exists,
+			# 	Memes.shasum,
+			# 	func.group_concat(Tags.tag_name.op(' ')(literal_column(",'~'")))).join(Memes ,Memes.id==Map_tags.meme_id).join(Tags ,Tags.id==Map_tags.tag_id).group_by(Memes.id)\
+			# .join(Memes ,Memes.id==Map_tags.meme_id)\
+			# .join(Tags ,Tags.id==Map_tags.tag_id)\
+			# .filter(Tags.id == tag_id)\
+			# .group_by(Memes.id)
 			qr = session.query(Map_tags.meme_id, 
-				Memes.filename,
-				Memes.path,
-				Memes.full_filename,
-				Memes.exists,
-				Memes.shasum,
-				).join(Memes ,Memes.id==Map_tags.meme_id)\
-			.join(Tags ,Tags.id==Map_tags.tag_id)\
+			Memes.filename,
+			Memes.path,
+			Memes.full_filename,
+			Memes.exists,
+			Memes.shasum,
+			func.group_concat(Tags.tag_name.op(' ')(literal_column(",'~'")))).join(Memes ,Memes.id==Map_tags.meme_id).join(Tags ,Tags.id==Map_tags.tag_id).group_by(Memes.id)\
 			.filter(Tags.id == tag_id)\
 			.group_by(Memes.id)
 
 		elif isinstance(tag_id, str):
+			# qr = session.query(Map_tags.meme_id, 
+			# 	Memes.filename,
+			# 	Memes.path,
+			# 	Memes.full_filename,
+			# 	Memes.exists,
+			# 	Memes.shasum,
+			# 	func.group_concat(Tags.tag_name.op(' ')(literal_column(",'~'")))).join(Memes ,Memes.id==Map_tags.meme_id).join(Tags ,Tags.id==Map_tags.tag_id).group_by(Memes.id)\
+			# .join(Memes ,Memes.id==Map_tags.meme_id)\
+			# .join(Tags ,Tags.id==Map_tags.tag_id)\
+			# .filter(Tags.tag_name == tag_id)\
+			# .group_by(Memes.id)
+
 			qr = session.query(Map_tags.meme_id, 
-				Memes.filename,
-				Memes.path,
-				Memes.full_filename,
-				Memes.exists,
-				Memes.shasum,
-				).join(Memes ,Memes.id==Map_tags.meme_id)\
-			.join(Tags ,Tags.id==Map_tags.tag_id)\
+			Memes.filename,
+			Memes.path,
+			Memes.full_filename,
+			Memes.exists,
+			Memes.shasum,
+			func.group_concat(Tags.tag_name.op(' ')(literal_column(",'~'")))).join(Memes ,Memes.id==Map_tags.meme_id).join(Tags ,Tags.id==Map_tags.tag_id).group_by(Memes.id)\
 			.filter(Tags.tag_name == tag_id)\
 			.group_by(Memes.id)
 
