@@ -39,8 +39,8 @@ const ViewImage = ({onChange, file, fileId}) => {
          
             <div className="tags">
             {
-              // file.tags.map((elem, index) => {
-                // return <Tag key={index} name={elem}/>
+              file.tags.map((elem, index) => {
+                return <Tag key={index} name={elem}/>
               })
             }
             </div>
