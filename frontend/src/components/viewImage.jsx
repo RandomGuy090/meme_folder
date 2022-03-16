@@ -1,13 +1,39 @@
 import React, { useState, useEffect} from 'react';
+import { CSSTransition } from 'react-transition-group';
 
 
 import Tag from "./tags/tag.jsx";
+import NewTag from "./tags/addNewtag.jsx";
 import ViewImageComment from "./viewImageComment.jsx";
 
 const ViewImage = ({onChange, file, fileId}) => {
-  useEffect(() => {
-      console.log(file)
-  })
+
+const [tags, setTags] = useState([])
+const [loading, setLoading] = useState(true)
+const [showMenu, setShowMenu] = useState(false)
+
+  
+  const fetchData = () => {
+     fetch("http://127.0.0.1:5000/tags/",
+      {
+            method: 'GET',
+            headers: {
+            'Content-Type': 'application/json',
+         }
+
+      }
+       )
+      .then((res) => res.json())
+      .then((json) => {
+        setTags(json);
+        setLoading(false);
+        console.log(json)
+      })
+  }
+  const addTagMenu = () => {
+    fetchData()
+    setShowMenu(showMenu => !showMenu);
+  }
  
   const changeState = (e) => {
 
@@ -16,6 +42,7 @@ const ViewImage = ({onChange, file, fileId}) => {
 
     }
   } 
+
 
 
   return (
@@ -44,6 +71,36 @@ const ViewImage = ({onChange, file, fileId}) => {
               })
             }
             </div>
+
+            <div className="addTagButtonDiv">
+              
+              <div className="addTagButton" onClick={addTagMenu}> 
+
+                add new tag
+              
+              </div>
+            </div>
+              <CSSTransition
+                in={showMenu}
+                timeout={300}
+                id="addTagMenu"
+                classNames="addTagMenu"
+                unmountOnExit
+                // onEnter={() => setShowButton(false)}
+                // onExited={() => setShowButton(true)}
+                // onEnter={() => addTagMenu()}
+                // onExited={() => addTagMenu()}
+              >
+
+                <div id="addTagMenu">
+                  {tags.map( (elem, index) => {
+                        return <NewTag key={index} name={elem.tag_name} tag_id={elem.id} fileId={file.id}/>
+                      })
+                   }
+
+
+                </div>
+               </CSSTransition>
       
         </div>
       

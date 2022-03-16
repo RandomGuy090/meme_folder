@@ -293,3 +293,59 @@ a {
 	align-items: center;
 	
 }
+
+
+.addTagButtonDiv{
+	height: 5vh;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	align-items: center;
+}
+.addTagButtonDiv > .addTagButton {
+	height: 100%;
+	width: 70%;
+	border-radius: 10px;
+	align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: green;
+}
+
+#addTagMenu{
+	position: fixed;
+    height: 50%;
+    width: 25%;
+    background-color: green;
+    bottom: 0;
+}
+
+
+.addTagMenu-enter {
+   opacity: 1;
+  transform: scale(0.9);
+  transform: translateY(400px);
+
+}
+
+.addTagMenu-enter-active {
+  opacity: 1;
+  transform: translateY(-100px);
+  transition: opacity 800ms, transform 800ms;
+
+}
+
+.addTagMenu-exit
+ {
+  opacity: 1;
+  transform: translateY(0px);
+
+}
+
+.addTagMenu-exit-active {
+  opacity: 0;
+  /*transform: scale(0.9);*/
+  transform: translateY(400px);
+  transition: opacity 800ms, transform 800ms;
+}
