@@ -2,12 +2,28 @@ import React, { useState, useEffect } from "react";
 
 const ImagePreviewObject = ({file, onChange, imgid}) => {
       
-  // const [imgDim, changeDim] = useState(null);
+  const [fileClicked, setFileClicked] = useState({});
 
   const changeState = (e) => {
     /*console.log(imgid)*/
+    console.log(file.id)
 
-    onChange(file, true, imgid)   
+    fetch(`http://127.0.0.1:5000/meme/${file.id}`,
+        {
+              method: 'GET',
+              headers: {
+              'Content-Type': 'application/json'
+           }
+        }
+         )
+        .then((res) => res.json())
+        .then((json) => {
+          // setFileClicked(json);
+          console.log(json)
+          onChange(json[0], true, imgid)   
+        })
+
+
   }
 
   
