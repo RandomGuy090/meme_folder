@@ -13,6 +13,7 @@ const RightPanel = ({setFiles}) => {
     }
   })
   const fetchData = () => {
+    console.log("fetch tags")
      fetch("http://127.0.0.1:5000/tags/",
       {
             method: 'GET',
@@ -29,14 +30,14 @@ const RightPanel = ({setFiles}) => {
       })
   }
 
-if(!loading){
+if(loading == false){
       return (
         <>
            <aside className="right">
            <div>
             {
               tags.map((elem, index) => {
-                return <Tag key={elem.id} setFiles={setFiles}  id={elem.id} name={elem.tag_name}/>
+                return <Tag key={elem.id} setFiles={setFiles} tag={elem}/>
               })
             }
            </div>  
@@ -51,7 +52,7 @@ if(!loading){
     return(
       <aside className="right">
            <div>
-             <Tag />
+           <p> Loading ...</p>
            </div>  
        </aside>
           )

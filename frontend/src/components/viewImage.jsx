@@ -94,7 +94,8 @@ const [showMenu, setShowMenu] = useState(false)
 
                 <div id="addTagMenu">
                   {tags.map( (elem, index) => {
-                        return <NewTag key={index} name={elem.tag_name} tag_id={elem.id} fileId={file.id}/>
+                    console.log(elem)
+                        return <Tag key={index}  tag={elem} file={file}/>
                       })
                    }
 

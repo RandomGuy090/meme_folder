@@ -19,7 +19,7 @@ const ImagePreviewObject = ({file, onChange, imgid}) => {
         .then((res) => res.json())
         .then((json) => {
           // setFileClicked(json);
-          console.log(json)
+          console.log(json[0])
           onChange(json[0], true, imgid)   
         })
 
